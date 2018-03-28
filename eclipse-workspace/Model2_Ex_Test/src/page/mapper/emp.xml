@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- xml지시어 -->
+<!-- 현재 xml문서의 dtd(문서타입선언) -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : sql명령어들의 집합 -->
+<mapper namespace="emp">
+
+<!-- id : 프로그램에서 호출하는 변수명 
+resultType : select 명령어의 리턴 타입(select tag 일경우필수)    parameterType(생략가능)-->
+	<select id="empList" resultType="e">
+       select *
+		 from(
+		    select A.*, rownum as rn
+		    from (
+		        select empno, ename
+		        from test
+		        order by empno
+		    )A
+		 )
+		 where rn between #{start} and #{end}
+	</select>
+		
+		
+	<select id="empCount" resultType="int">
+	
+      select count(*) from test
+      
+	</select>
+	
+	<!-- 
+	$() jQuery 의 선택자
+	${} EL변수
+	#{} mybatis변수 =>(따옴표가 포함) ex)String 일 경우
+	${} mybatis변수 =>(따옴표가 포함X)ex)int
+	-->
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- xml지시어 -->
+<!-- 현재 xml문서의 dtd(문서타입선언) -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : sql명령어들의 집합 -->
+<mapper namespace="guestbook">
+
+<!-- id : 프로그램에서 호출하는 변수명 
+resultType : select 명령어의 리턴 타입(select tag 일경우필수)    parameterType(생략가능)-->
+		<select id="gbList" resultType="guestbook.dto.GuestBookDTO" >
+			select idx, gb_name, gb_email, gb_content, post_date
+			from guestbook
+			where ${searchkey} like #{search}
+			order by idx desc
+		</select> 
+		
+		<select id="gbListAll" resultType="guestbook.dto.GuestBookDTO" >
+			select idx, gb_name, gb_email, gb_content, post_date
+			from guestbook
+			where gb_name like #{search} or gb_content like #{search}
+			order by idx desc
+		</select> 
+		
+		<select id="passwdCheck" resultType="int">
+			select count(*) from guestbook
+			where idx=#{idx} and gb_passwd=#{gb_passwd}
+		</select> 
+		
+		<select id="gbDetail" resultType="guestbook.dto.GuestBookDTO" parameterType="int">
+			select * from guestbook
+			where idx=#{idx}
+		</select> 
+	
+	
+		<insert id="gbInsert" >
+			insert into  guestbook (idx, gb_name, gb_email, gb_passwd, gb_content) values
+			(guestbook_seq.nextval, #{gb_name}, #{gb_email}, #{gb_passwd}, #{gb_content})
+		</insert> 
+		
+		<!-- parameterType은 생략이 가능함 -->
+		<update id="gbUpdate" >
+			update guestbook set
+			gb_name=#{gb_name}, gb_email=#{gb_email}, gb_passwd=#{gb_passwd}, gb_content=#{gb_content}
+			where idx=#{idx}
+		</update> 
+		
+		<delete id="gbDelete" parameterType="int">
+			delete from guestbook
+			where idx=#{idx}
+		
+		</delete>
+	
+	<!-- 
+	$() jQuery 의 선택자
+	${} EL변수
+	#{} mybatis변수 =>(따옴표가 포함) ex)String 일 경우
+	${} mybatis변수 =>(따옴표가 포함X)ex)int
+	-->
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+

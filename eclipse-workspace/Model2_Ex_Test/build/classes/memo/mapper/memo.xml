@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- xml지시어 -->
+<!-- 현재 xml문서의 dtd(문서타입선언) -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : sql명령어들의 집합 -->
+<mapper namespace="memo">
+
+<!-- id : 프로그램에서 호출하는 변수명 
+resultType : select 명령어의 리턴 타입-->
+	<select id="listAll" resultType="memo.dto.MemoDTO">
+		select idx,writer,memo
+			,to_char (post_date, 'yyyy-mm-dd hh24:mi:ss') post_date
+		from memo
+		where writer like '%'|| #{search} ||'%'
+			or memo like '%'|| #{search} ||'%'
+		order by idx desc
+	</select> 
+	
+	<select id="list" resultType="memo.dto.MemoDTO">
+		select idx,writer,memo
+			,to_char (post_date, 'yyyy-mm-dd hh24:mi:ss') post_date
+		from memo
+		where ${searchkey} like '%'|| #{search} ||'%'
+		order by idx desc
+	</select>
+	
+	<!-- resultType => 필수            parameterType="int" 생략가능-쓰기를 권장-->
+	<select id="view" resultType="memo.dto.MemoDTO" parameterType="int">
+		select * from memo where idx = #{idx}
+	</select>
+	
+	
+					<!-- parameterType="memo.dto.MemoDTO" 생략가능-쓰기를 권장-->
+	<insert id="insert"  parameterType="memo.dto.MemoDTO"> 
+		insert into memo (idx, writer, memo ) values
+		((select nvl(max(idx)+1,1)from memo)
+		, #{writer} , #{memo})
+	</insert>
+					<!-- parameterType="memo.dto.MemoDTO" 생략가능-쓰기를 권장-->
+	<update id="update" parameterType="memo.dto.MemoDTO">
+		update memo set writer=#{writer}, memo=#{memo}
+		where idx = #{idx}
+	</update>
+	
+	<delete id="delete">
+		delete from memo
+		where idx = #{idx}
+	</delete>
+	
+	<!-- 
+	$() jQuery 의 선택자
+	${} EL변수
+	#{} mybatis변수 =>(따옴표가 포함) ex)String 일 경우
+	${} mybatis변수 =>(따옴표가 포함X)ex)int
+	-->
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
